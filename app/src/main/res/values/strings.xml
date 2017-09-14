@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">MyPoint</string>
+    <string name="prefs">MYPOINT_PREFS</string>
+</resources>
