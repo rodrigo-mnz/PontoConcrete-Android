@@ -16,18 +16,13 @@ import java.util.*
 
 class SimpleWidgetProvider : AppWidgetProvider() {
 
-    companion object {
-        private val ACTION_REGISTER = "ACTION_REGISTER"
-    }
-
+    private val ACTION_REGISTER = "ACTION_REGISTER"
     private val CLIENT_ID = "client_id"
     private val TOKEN = "token"
     private val EMAIL = "email"
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-
         for (appWidgetId in appWidgetIds) {
-
             val views = RemoteViews(context.packageName, R.layout.widget_layout)
             val intent = Intent(context, SimpleWidgetProvider::class.java)
             intent.action = ACTION_REGISTER
@@ -49,11 +44,7 @@ class SimpleWidgetProvider : AppWidgetProvider() {
 
     private fun register(context: Context) {
         val sharedPref = context.getSharedPreferences(context.getString(R.string.prefs), Context.MODE_PRIVATE)
-
-        val timeCard = generateTimeCard()
-        val device = generateDevice()
-        val register = generateRegisterData(timeCard, device)
-
+        val register = generateRegisterData()
         val token = sharedPref.getString(TOKEN, "")
         val client = sharedPref.getString(CLIENT_ID, "")
         val email = sharedPref.getString(EMAIL, "")
@@ -74,9 +65,12 @@ class SimpleWidgetProvider : AppWidgetProvider() {
         })
     }
 
-    private fun generateRegisterData(timeCard: TimeCard, device: Device) =
-            Register(timeCard, "/meu_ponto/registro_de_ponto", device,
-                    "0.10.21")
+    private fun generateRegisterData(): Register {
+        val timeCard = generateTimeCard()
+        val device = generateDevice()
+        return Register(timeCard, "/meu_ponto/registro_de_ponto", device,
+                "0.10.21")
+    }
 
     private fun generateDevice() = Device("4.1.0", "unknown", "Chrome", "browser", null, "61.0.3163.79")
 

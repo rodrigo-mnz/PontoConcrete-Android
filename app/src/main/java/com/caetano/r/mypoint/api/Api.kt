@@ -13,14 +13,13 @@ object Api {
         initApi()
     }
 
-    fun initApi(): ApiService {
+    private fun initApi(): ApiService {
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
 
         val client = OkHttpClient.Builder()
                 .addInterceptor(logging)
                 .build()
-
 
         val mRetrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
