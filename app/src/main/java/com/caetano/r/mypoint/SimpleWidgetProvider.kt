@@ -52,7 +52,7 @@ class SimpleWidgetProvider : AppWidgetProvider() {
         Api.service.register(register, token, client, email).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                 if (response.isSuccessful) {
-                    Toast.makeText(context, response.body().success, Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, response.body()?.success, Toast.LENGTH_LONG).show()
                     updateLastRegisterText(context)
                 } else {
                     Toast.makeText(context, "Failed: ${response.message()}", Toast.LENGTH_LONG).show()

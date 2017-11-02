@@ -47,9 +47,9 @@ class MainActivity : AppCompatActivity() {
         val login = Login(edt_cpf.text.toString(), edt_password.text.toString())
         Api.service.signIn(login).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                if (response.isSuccessful) {
+                if (response.isSuccessful && response.body() != null) {
                     arrangeLayout(LOGGED)
-                    saveResponseValues(response.body())
+                    saveResponseValues(response.body()!!)
                 } else {
                     arrangeLayout(LOGIN)
                     Toast.makeText(this@MainActivity, response.message(), Toast.LENGTH_LONG).show()
