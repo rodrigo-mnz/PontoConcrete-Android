@@ -94,7 +94,7 @@ class SimpleWidgetProvider : AppWidgetProvider() {
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val min = calendar.get(Calendar.MINUTE)
 
-        val timeToPrint = "Last register\n$hour:$min"
+        val timeToPrint = context.getString(R.string.widget_hour_minute, hour, min)
 
         val views = RemoteViews(context.packageName, R.layout.widget_layout)
         views.setTextViewText(R.id.txt_last_register, timeToPrint)
