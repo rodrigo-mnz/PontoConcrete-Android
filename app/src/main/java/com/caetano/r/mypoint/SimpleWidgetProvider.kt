@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.view.View
 import android.widget.RemoteViews
 import android.widget.Toast
 import com.caetano.r.mypoint.api.*
@@ -39,6 +40,12 @@ class SimpleWidgetProvider : AppWidgetProvider() {
         super.onReceive(context, intent)
         if (ACTION_REGISTER == intent.action) {
             register(context)
+            val remoteViews = RemoteViews(context.packageName, R.layout.widget_layout)
+            remoteViews.setViewVisibility(R.id.btn_register, View.GONE)
+            remoteViews.setViewVisibility(R.id.progressbar, View.VISIBLE)
+            val appWidgetManager = AppWidgetManager.getInstance(context)
+            val appWidget = ComponentName(context, SimpleWidgetProvider::class.java)
+            appWidgetManager.updateAppWidget(appWidget, remoteViews)
         }
     }
 
@@ -87,12 +94,14 @@ class SimpleWidgetProvider : AppWidgetProvider() {
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val min = calendar.get(Calendar.MINUTE)
 
-        val timeToPrint = "Last register\n$hour:$min"
+        val timeToPrint = context.getString(R.string.widget_hour_minute, hour, min)
 
         val views = RemoteViews(context.packageName, R.layout.widget_layout)
         views.setTextViewText(R.id.txt_last_register, timeToPrint)
         val appWidget = ComponentName(context, SimpleWidgetProvider::class.java)
         val appWidgetManager = AppWidgetManager.getInstance(context)
+        views.setViewVisibility(R.id.btn_register, View.VISIBLE)
+        views.setViewVisibility(R.id.progressbar, View.GONE)
         appWidgetManager.updateAppWidget(appWidget, views)
     }
 }
