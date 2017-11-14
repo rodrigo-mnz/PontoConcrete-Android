@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">MyPoint</string>
-    <string name="prefs">MYPOINT_PREFS</string>
     <string name="widget_hour_minute">Last register\n%1$02d:%2$02d</string>
 </resources>
