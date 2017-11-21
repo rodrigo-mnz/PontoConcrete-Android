@@ -27,7 +27,7 @@
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:textColor="@android:color/white"
-        android:text="Last register\n-"
-        tools:text="Last register\n18:30" />
+        android:text="Último Registro\n-"
+        tools:text="Último Registro\n18:30" />
 
 </LinearLayout>
