@@ -19,12 +19,20 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="SimpleWidgetProvider" >
+        <receiver android:name=".widgets.DefaultWidget" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
-                android:resource="@xml/simple_widget_info" />
+                android:resource="@xml/default_widget_info" />
+        </receiver>
+
+        <receiver android:name=".widgets.MiniWidget" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/mini_widget_info" />
         </receiver>
 
     </application>
