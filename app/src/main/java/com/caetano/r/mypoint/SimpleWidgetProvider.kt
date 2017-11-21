@@ -18,12 +18,11 @@ import java.util.*
 class SimpleWidgetProvider : AppWidgetProvider() {
 
     private val ACTION_REGISTER = "ACTION_REGISTER"
-    private val CLIENT_ID = "client_id"
-    private val TOKEN = "token"
-    private val EMAIL = "email"
+    private lateinit var userManager: UserManager
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         for (appWidgetId in appWidgetIds) {
+            userManager = UserManager.newInstance(context)
             val views = RemoteViews(context.packageName, R.layout.widget_layout)
             val intent = Intent(context, SimpleWidgetProvider::class.java)
             intent.action = ACTION_REGISTER
@@ -50,13 +49,10 @@ class SimpleWidgetProvider : AppWidgetProvider() {
     }
 
     private fun register(context: Context) {
-        val sharedPref = context.getSharedPreferences(context.getString(R.string.prefs), Context.MODE_PRIVATE)
         val register = generateRegisterData()
-        val token = sharedPref.getString(TOKEN, "")
-        val client = sharedPref.getString(CLIENT_ID, "")
-        val email = sharedPref.getString(EMAIL, "")
+        val savedUser = userManager.getSavedUser()
 
-        Api.service.register(register, token, client, email).enqueue(object : Callback<RegisterResponse> {
+        Api.service.register(register, savedUser.token, savedUser.clientId, savedUser.email).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                 if (response.isSuccessful) {
                     Toast.makeText(context, response.body()?.success, Toast.LENGTH_LONG).show()
