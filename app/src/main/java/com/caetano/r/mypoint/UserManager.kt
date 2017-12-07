@@ -26,7 +26,7 @@ class UserManager(private val sharedPreferences: SharedPreferences) {
                 .apply()
     }
 
-    fun getSavedUser() : SavedUser {
+    fun getSavedUser(): SavedUser {
         val clientId = sharedPreferences.getString(CLIENT_ID, "")
         val token = sharedPreferences.getString(TOKEN, "")
         val email = sharedPreferences.getString(EMAIL, "")
@@ -35,5 +35,4 @@ class UserManager(private val sharedPreferences: SharedPreferences) {
     }
 
     fun hasSavedUser(): Boolean = !sharedPreferences.getString(TOKEN, "").isEmpty()
-
 }
