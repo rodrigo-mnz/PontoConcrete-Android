@@ -90,13 +90,6 @@ class MiniWidget : AppWidgetProvider() {
     }
 
     private fun updateLastRegisterText(context: Context) {
-
-        val calendar = Calendar.getInstance()
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val min = calendar.get(Calendar.MINUTE)
-
-        val timeToPrint = context.getString(R.string.widget_hour_minute, hour, min)
-
         val views = RemoteViews(context.packageName, R.layout.mini_widget_layout)
         views.setViewVisibility(R.id.progressbar, View.GONE)
         views.setViewVisibility(R.id.ic_success, View.VISIBLE)
@@ -106,22 +99,18 @@ class MiniWidget : AppWidgetProvider() {
         val appWidget = ComponentName(context, MiniWidget::class.java)
         val appWidgetManager = AppWidgetManager.getInstance(context)
 
-
-
-
         appWidgetManager.updateAppWidget(appWidget, views)
 
-
         val handler = Handler()
-        handler.postDelayed(Runnable {
-            val views = RemoteViews(context.packageName, R.layout.mini_widget_layout)
-            views.setViewVisibility(R.id.btn_register, View.VISIBLE)
-            views.setViewVisibility(R.id.ic_success, View.GONE)
+        handler.postDelayed({
+            val remoteViews = RemoteViews(context.packageName, R.layout.mini_widget_layout)
+            remoteViews.setViewVisibility(R.id.btn_register, View.VISIBLE)
+            remoteViews.setViewVisibility(R.id.ic_success, View.GONE)
 
-            views.setInt(R.id.mini_widget_layout, "setBackgroundResource", R.drawable.round)
+            remoteViews.setInt(R.id.mini_widget_layout, "setBackgroundResource", R.drawable.round)
 
 
-            appWidgetManager.updateAppWidget(appWidget, views)
+            appWidgetManager.updateAppWidget(appWidget, remoteViews)
         }, 5000)
     }
 }
