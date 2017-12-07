@@ -51,6 +51,7 @@ class DefaultWidget : AppWidgetProvider() {
     }
 
     private fun register(context: Context) {
+        userManager = UserManager.newInstance(context)
         val register = generateRegisterData()
         val savedUser = userManager.getSavedUser()
 

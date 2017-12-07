@@ -14,7 +14,9 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var userManager : UserManager
+    private val userManager by lazy {
+        UserManager.newInstance(this)
+    }
 
     companion object {
         private val LOADING = 0
@@ -24,7 +26,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userManager = UserManager.newInstance(this)
 
         setContentView(R.layout.activity_main)
 
