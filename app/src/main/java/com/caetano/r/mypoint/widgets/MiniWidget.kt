@@ -16,7 +16,6 @@ import com.caetano.r.mypoint.api.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 
 class MiniWidget : AppWidgetProvider() {
 
@@ -43,8 +42,7 @@ class MiniWidget : AppWidgetProvider() {
         if (ACTION_REGISTER == intent.action) {
             register(context)
             val remoteViews = RemoteViews(context.packageName, R.layout.mini_widget_layout)
-            remoteViews.setViewVisibility(R.id.btn_register, View.GONE)
-            remoteViews.setViewVisibility(R.id.progressbar, View.VISIBLE)
+            showProgressBar(remoteViews, true)
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val appWidget = ComponentName(context, MiniWidget::class.java)
             appWidgetManager.updateAppWidget(appWidget, remoteViews)
@@ -62,12 +60,12 @@ class MiniWidget : AppWidgetProvider() {
                     Toast.makeText(context, response.body()?.success, Toast.LENGTH_LONG).show()
                     updateLastRegisterText(context)
                 } else {
-                    Toast.makeText(context, "Failed: ${response.message()}", Toast.LENGTH_LONG).show()
+                    showFailMessage(context, response.message())
                 }
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                Toast.makeText(context, "Failed: ${t.message}", Toast.LENGTH_LONG).show()
+                t.message?.let { showFailMessage(context, it) }
             }
         })
     }
@@ -104,13 +102,22 @@ class MiniWidget : AppWidgetProvider() {
         val handler = Handler()
         handler.postDelayed({
             val remoteViews = RemoteViews(context.packageName, R.layout.mini_widget_layout)
-            remoteViews.setViewVisibility(R.id.btn_register, View.VISIBLE)
-            remoteViews.setViewVisibility(R.id.ic_success, View.GONE)
+            showProgressBar(remoteViews, false)
 
             remoteViews.setInt(R.id.mini_widget_layout, "setBackgroundResource", R.drawable.round)
 
-
             appWidgetManager.updateAppWidget(appWidget, remoteViews)
         }, 5000)
+    }
+
+    private fun showProgressBar(remoteViews: RemoteViews, show: Boolean) {
+        remoteViews.setViewVisibility(R.id.btn_register, if (show) View.GONE else View.VISIBLE)
+        remoteViews.setViewVisibility(R.id.progressbar, if (show) View.VISIBLE else View.GONE)
+    }
+
+    private fun showFailMessage(context: Context, message: String) {
+        val remoteViews = RemoteViews(context.packageName, R.layout.default_widget_layout)
+        showProgressBar(remoteViews, false)
+        Toast.makeText(context, "Failed: $message", Toast.LENGTH_LONG).show()
     }
 }
