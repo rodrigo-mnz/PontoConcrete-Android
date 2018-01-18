@@ -1,5 +1,6 @@
 package com.caetano.r.mypoint.api
 
+//----------Main API--------------------
 data class Login(val login: String, val password: String)
 
 data class LoginData(val email: String)
@@ -19,3 +20,8 @@ data class Device(val cordova: String, val manufacturer: String, val model: Stri
                   val version: String)
 
 data class RegisterResponse(val success: String)
+
+//----------Github API--------------------
+data class GithubRelease(val tag_name: String, val assets: List<GithubAsset>)
+
+data class GithubAsset(val browser_download_url: String)

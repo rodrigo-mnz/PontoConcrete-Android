@@ -3,10 +3,7 @@ package com.caetano.r.mypoint
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.Toast
-import com.caetano.r.mypoint.api.Api
-import com.caetano.r.mypoint.api.Login
-import com.caetano.r.mypoint.api.LoginResponse
+import com.caetano.r.mypoint.api.*
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -36,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         btn_login.setOnClickListener {
             arrangeLayout(LOADING)
             doLogin()
-        }
     }
 
     private fun doLogin() {
@@ -48,13 +44,13 @@ class MainActivity : AppCompatActivity() {
                     userManager.saveUser(response.body()!!)
                 } else {
                     arrangeLayout(LOGIN)
-                    Toast.makeText(this@MainActivity, response.message(), Toast.LENGTH_LONG).show()
+                    showToast(response.message())
                 }
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 arrangeLayout(LOGIN)
-                Toast.makeText(this@MainActivity, t.message, Toast.LENGTH_LONG).show()
+                t.message?.let { showToast(it) }
             }
         })
     }
