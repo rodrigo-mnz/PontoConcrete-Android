@@ -3,7 +3,9 @@ package com.caetano.r.mypoint
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import com.caetano.r.mypoint.api.*
+import com.caetano.r.mypoint.api.Api
+import com.caetano.r.mypoint.api.Login
+import com.caetano.r.mypoint.api.LoginResponse
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -33,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         btn_login.setOnClickListener {
             arrangeLayout(LOADING)
             doLogin()
+        }
     }
 
     private fun doLogin() {
