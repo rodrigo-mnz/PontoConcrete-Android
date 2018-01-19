@@ -46,7 +46,7 @@ class UpdateJob : JobService() {
         val compare = githubRelease.tag_name.compareTo(BuildConfig.VERSION_NAME, true)
         if (compare > 0) {
 
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(githubRelease.assets[0].browser_download_url))
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(githubRelease.html_url))
 
             val resultPendingIntent = PendingIntent.getActivity(
                     this,

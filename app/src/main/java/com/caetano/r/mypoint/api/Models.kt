@@ -22,6 +22,4 @@ data class Device(val cordova: String, val manufacturer: String, val model: Stri
 data class RegisterResponse(val success: String)
 
 //----------Github API--------------------
-data class GithubRelease(val tag_name: String, val assets: List<GithubAsset>)
-
-data class GithubAsset(val browser_download_url: String)
+data class GithubRelease(val tag_name: String, val html_url: String)

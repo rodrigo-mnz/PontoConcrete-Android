@@ -35,11 +35,11 @@ class CustomApplication : Application() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-            val halfDayInMillis = 43200000L
+            val halfDayInMillis = 12 * 60 * 60 * 1000L
             jobScheduler.schedule(JobInfo.Builder(1,
                     ComponentName(this, UpdateJob::class.java))
                     .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                    .setMinimumLatency(halfDayInMillis)
+                    .setPeriodic(halfDayInMillis)
                     .build())
         }
     }
