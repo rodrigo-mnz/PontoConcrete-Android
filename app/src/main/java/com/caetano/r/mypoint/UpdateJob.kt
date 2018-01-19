@@ -27,7 +27,6 @@ class UpdateJob : JobService() {
     }
 
     override fun onStartJob(p0: JobParameters?): Boolean {
-        Log.i(this.toString(), "onStartJob")
         ApiGithub.service.getLatestRelease().enqueue(object : Callback<GithubRelease> {
             override fun onResponse(call: Call<GithubRelease>, response: Response<GithubRelease>) {
                 if (response.isSuccessful && response.body() != null) {
@@ -56,8 +55,8 @@ class UpdateJob : JobService() {
             )
             val builder = NotificationCompat.Builder(this, UPDATE_CHANNEL_ID)
                     .setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentTitle("PontoConcrete")
-                    .setContentText("Nova versão!")
+                    .setContentTitle(getString(R.string.update_notification_title))
+                    .setContentText(getString(R.string.update_notification_description, githubRelease.tag_name))
                     .setContentIntent(resultPendingIntent)
 
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
