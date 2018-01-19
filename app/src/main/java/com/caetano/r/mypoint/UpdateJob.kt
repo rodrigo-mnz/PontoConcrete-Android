@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.v4.app.NotificationCompat
+import android.support.v4.content.res.ResourcesCompat
 import android.util.Log
 import com.caetano.r.mypoint.CustomApplication.Companion.UPDATE_CHANNEL_ID
 import com.caetano.r.mypoint.api.ApiGithub
@@ -51,13 +52,15 @@ class UpdateJob : JobService() {
                     this,
                     0,
                     browserIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_ONE_SHOT
             )
             val builder = NotificationCompat.Builder(this, UPDATE_CHANNEL_ID)
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setColor(ResourcesCompat.getColor(resources, R.color.colorPrimaryDark, theme))
                     .setContentTitle(getString(R.string.update_notification_title))
                     .setContentText(getString(R.string.update_notification_description, githubRelease.tag_name))
                     .setContentIntent(resultPendingIntent)
+                    .setAutoCancel(true)
 
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.notify(1, builder.build())
