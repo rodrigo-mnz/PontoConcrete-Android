@@ -42,7 +42,7 @@ class DefaultWidget : AppWidgetProvider() {
         if (ACTION_REGISTER == intent.action) {
             register(context)
             val remoteViews = RemoteViews(context.packageName, R.layout.default_widget_layout)
-            showProgressBar(remoteViews, true)
+            showProgressBar(context, remoteViews, true)
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val appWidget = ComponentName(context, DefaultWidget::class.java)
             appWidgetManager.updateAppWidget(appWidget, remoteViews)
@@ -53,9 +53,11 @@ class DefaultWidget : AppWidgetProvider() {
         userManager = UserManager.newInstance(context)
         val register = generateRegisterData()
         val savedUser = userManager.getSavedUser()
+        val remoteViews = RemoteViews(context.packageName, R.layout.default_widget_layout)
 
         Api.service.register(register, savedUser.token, savedUser.clientId, savedUser.email).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+                showProgressBar(context, remoteViews, false)
                 if (response.isSuccessful) {
                     Toast.makeText(context, response.body()?.success, Toast.LENGTH_LONG).show()
                     updateLastRegisterText(context)
@@ -65,6 +67,7 @@ class DefaultWidget : AppWidgetProvider() {
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                showProgressBar(context, remoteViews, false)
                 t.message?.let { showFailMessage(context, it) }
             }
         })
@@ -96,20 +99,23 @@ class DefaultWidget : AppWidgetProvider() {
 
         val views = RemoteViews(context.packageName, R.layout.default_widget_layout)
         views.setTextViewText(R.id.txt_last_register, timeToPrint)
+        updateWidget(context, views)
+    }
+
+    private fun updateWidget(context: Context, views: RemoteViews) {
         val appWidget = ComponentName(context, DefaultWidget::class.java)
         val appWidgetManager = AppWidgetManager.getInstance(context)
-        showProgressBar(views, false)
         appWidgetManager.updateAppWidget(appWidget, views)
     }
 
-    private fun showProgressBar(remoteViews: RemoteViews, show: Boolean) {
+    private fun showProgressBar(context: Context, remoteViews: RemoteViews, show: Boolean) {
         remoteViews.setViewVisibility(R.id.btn_register, if (show) View.GONE else View.VISIBLE)
         remoteViews.setViewVisibility(R.id.progressbar, if (show) View.VISIBLE else View.GONE)
+
+        updateWidget(context, remoteViews)
     }
 
     private fun showFailMessage(context: Context, message: String) {
-        val remoteViews = RemoteViews(context.packageName, R.layout.default_widget_layout)
-        showProgressBar(remoteViews, false)
         Toast.makeText(context, "Failed: $message", Toast.LENGTH_LONG).show()
     }
 }

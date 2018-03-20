@@ -42,7 +42,7 @@ class MiniWidget : AppWidgetProvider() {
         if (ACTION_REGISTER == intent.action) {
             register(context)
             val remoteViews = RemoteViews(context.packageName, R.layout.mini_widget_layout)
-            showProgressBar(remoteViews, true)
+            showProgressBar(context, remoteViews, true)
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val appWidget = ComponentName(context, MiniWidget::class.java)
             appWidgetManager.updateAppWidget(appWidget, remoteViews)
@@ -102,22 +102,25 @@ class MiniWidget : AppWidgetProvider() {
         val handler = Handler()
         handler.postDelayed({
             val remoteViews = RemoteViews(context.packageName, R.layout.mini_widget_layout)
-            showProgressBar(remoteViews, false)
-
+            remoteViews.setViewVisibility(R.id.ic_success, View.GONE)
             remoteViews.setInt(R.id.mini_widget_layout, "setBackgroundResource", R.drawable.round)
 
-            appWidgetManager.updateAppWidget(appWidget, remoteViews)
+            showProgressBar(context, remoteViews, false)
         }, 5000)
     }
 
-    private fun showProgressBar(remoteViews: RemoteViews, show: Boolean) {
+    private fun showProgressBar(context: Context, remoteViews: RemoteViews, show: Boolean) {
         remoteViews.setViewVisibility(R.id.btn_register, if (show) View.GONE else View.VISIBLE)
         remoteViews.setViewVisibility(R.id.progressbar, if (show) View.VISIBLE else View.GONE)
+
+        val appWidget = ComponentName(context, MiniWidget::class.java)
+        val appWidgetManager = AppWidgetManager.getInstance(context)
+        appWidgetManager.updateAppWidget(appWidget, remoteViews)
     }
 
     private fun showFailMessage(context: Context, message: String) {
-        val remoteViews = RemoteViews(context.packageName, R.layout.default_widget_layout)
-        showProgressBar(remoteViews, false)
+        val remoteViews = RemoteViews(context.packageName, R.layout.mini_widget_layout)
+        showProgressBar(context, remoteViews, false)
         Toast.makeText(context, "Failed: $message", Toast.LENGTH_LONG).show()
     }
 }
